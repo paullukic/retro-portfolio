@@ -47,4 +47,12 @@
 		border-bottom: 1px solid gray;
 		box-shadow: inset 1px 1px #dfdfdf, 1px 0 #000, 0 1px #000, 1px 1px #000;
     }
+    .win-icon {
+		width: 64px;
+		height: 64px;
+		background-size: 64px 64px;
+		background-repeat: no-repeat;
+		background-position: center;
+		margin: auto;
+	}
 </style>
