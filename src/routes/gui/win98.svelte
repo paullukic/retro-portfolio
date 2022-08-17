@@ -132,10 +132,10 @@
 					top: getWinTopPostition(name)
 				}
 			];
-		else onStartMenuBarClick(name);
+		else bringWindowToTop(name);
 	}
 
-	function onStartMenuBarClick(name: string) {
+	function bringWindowToTop(name: string) {
 		showStartMenu = false;
 		if (browser) {
 			// get all elements with class
@@ -163,6 +163,7 @@
 						top: getWinTopPostition(name)
 					}
 				];
+			else if(openWindows.find((w) => w.name === name)) bringWindowToTop(name);
 		} else doubleClicked = true;
 	}
 
@@ -242,7 +243,7 @@
 			<span class="ml-5 flex flex-initial">
 				{#each openWindows as windw, index}
 					<!-- svelte-ignore a11y-missing-attribute -->
-					<span on:click={() => onStartMenuBarClick(windw.name)}
+					<span on:click={() => bringWindowToTop(windw.name)}
 						class="flex start-menu-button mr-1 inset-y-0 px-4 py-2 bg-gray-200 text-gray-700 font-bold text-xs leading-tight uppercase hover:bg-gray-300 focus:bg-gray-300 focus:ring-0 active:bg-gray-400"
 					>
 						<img class="w-5 flex-initial"
