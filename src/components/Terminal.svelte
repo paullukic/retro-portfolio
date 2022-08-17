@@ -173,7 +173,7 @@
 				//get cv from firestore
 			}
 			if (valueCommand.text === ('start gui -win98')) {
-				window.open('/gui/win98', '_blank');
+				window.open('/gui/win98.html', '_blank');
 			}
 			if (valueCommand.text === 'get social') {
 				let socialLinks: TerminalLine[] = [

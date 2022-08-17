@@ -84,26 +84,26 @@
 
 	// functions
 	function getWinLeftPostition(name: string): number {
-		let local = JSON.parse(localStorage.windowsPos);
-		if (local) {
+		if(localStorage.windowsPos){
+			let local = JSON.parse(localStorage.windowsPos);
 			let windowPos = local.find((window: string) => window.split(',')[0] === name);
 			if (windowPos) {
 				return parseInt(windowPos.split(',')[1]);
 			}
+		
 		}
-		return 0;
+		return 10;
 	}
 
 	function getWinTopPostition(name: string): number {
-		let local = JSON.parse(localStorage.windowsPos);
-
-		if (local) {
+		if(localStorage.windowsPos){
+			let local = JSON.parse(localStorage.windowsPos);
 			let windowPos = local.find((window: string) => window.split(',')[0] === name);
 			if (windowPos) {
 				return parseInt(windowPos.split(',')[2]);
 			}
 		}
-		return 0;
+		return 10;
 	}
 
 	function onStartClick() {
