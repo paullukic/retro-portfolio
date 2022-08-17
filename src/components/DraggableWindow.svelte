@@ -63,18 +63,11 @@
 	}
 </script>
 
-<section on:mousedown={onMouseDown} style="left: {left}px; top: {top}px; z-index:{zIndex};" class="draggable">
+<section on:mousedown={onMouseDown} style="left: {left}px; top: {top}px; z-index:{zIndex};" class="absolute">
 	<slot name="window-bar" />
 </section>
-<section  style="left: {left}px; top: {top}px; z-index:{zIndex};" class="draggable">
+<section  style="left: {left}px; top: {top}px; z-index:{zIndex};" class="absolute">
     <slot name="window-content" />
 </section>
 
 <svelte:window on:mouseup={() => onMouseUp(title)} on:mousemove={onMouseMove} />
-
-<style>
-	.draggable {
-		cursor: pointer;
-		position: absolute;
-	}
-</style>
