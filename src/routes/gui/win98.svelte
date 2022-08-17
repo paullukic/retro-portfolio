@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { browser } from '$app/env';
 	import Projects from '../../components/Projects.svelte';
+	import Contact from '../../components/Contact.svelte';
 	import DraggableIcon from '../../components/DraggableIcon.svelte';
 	import Terminal from '../../components/Terminal.svelte';
 	import Window from '../../components/Window.svelte';
 	import { windowPositionLocalStorage } from '../../store/stores';
 
-	windowPositionLocalStorage.subscribe(val => {
-		if(browser && val) return (localStorage.windowsPos = val);
+	windowPositionLocalStorage.subscribe((val) => {
+		if (browser && val) return (localStorage.windowsPos = val);
 	});
 
 	let date: Date = new Date();
@@ -16,7 +17,7 @@
 
 	let time: string = `${hours}:${minutes}`;
 	let dateString: string = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
-	
+
 	let showStartMenu: boolean = false;
 	let displayWindowComponent: boolean = false; //its in use
 	let doubleClicked: boolean = false;
@@ -48,6 +49,14 @@
 			top: '150px',
 			onClick: () => onIconClick('projects', Projects),
 			component: Projects
+		},
+		{
+			name: 'contact',
+			icon: '../win98/contact.png',
+			left: '50px',
+			top: '250px',
+			onClick: () => onIconClick('contact', Contact),
+			component: Contact
 		}
 	];
 
@@ -58,17 +67,19 @@
 	};
 	let startMenuPrograms: startMenuProgram[] = [
 		{
-			name: 'Portfolio'
+			name: 'projects',
+			onClick: () => onStartMenuItemClick('projects', Projects)
 		},
 		{
 			name: 'Resume'
 		},
 		{
-			name: 'Contact'
+			name: 'Contact',
+			onClick: () => onStartMenuItemClick('contact', Contact)
 		},
 		{
 			name: 'Terminal',
-			onClick: () => onStartMenuItemClick('cmd', Terminal),
+			onClick: () => onStartMenuItemClick('cmd', Terminal)
 		}
 	];
 
@@ -78,25 +89,24 @@
 		component: any;
 		left: number;
 		top: number;
+		iconPath?: string;
 	};
 	let openWindows: SystemWindow[] = [];
 
-
 	// functions
 	function getWinLeftPostition(name: string): number {
-		if(localStorage.windowsPos){
+		if (localStorage.windowsPos) {
 			let local = JSON.parse(localStorage.windowsPos);
 			let windowPos = local.find((window: string) => window.split(',')[0] === name);
 			if (windowPos) {
 				return parseInt(windowPos.split(',')[1]);
 			}
-		
 		}
 		return 10;
 	}
 
 	function getWinTopPostition(name: string): number {
-		if(localStorage.windowsPos){
+		if (localStorage.windowsPos) {
 			let local = JSON.parse(localStorage.windowsPos);
 			let windowPos = local.find((window: string) => window.split(',')[0] === name);
 			if (windowPos) {
@@ -108,23 +118,31 @@
 
 	function onStartClick() {
 		showStartMenu = !showStartMenu;
-	};
+	}
 
 	function onStartMenuItemClick(name: string, component: any) {
 		showStartMenu = false;
-		if(!openWindows.find(w => w.name === name)) 
-			openWindows = [...openWindows, { name: name, component: component, 
-					left: getWinLeftPostition(name), top: getWinTopPostition(name) }];
+		if (!openWindows.find((w) => w.name === name))
+			openWindows = [
+				...openWindows,
+				{
+					name: name,
+					component: component,
+					left: getWinLeftPostition(name),
+					top: getWinTopPostition(name)
+				}
+			];
+		else onStartMenuBarClick(name);
 	}
 
 	function onStartMenuBarClick(name: string) {
 		showStartMenu = false;
-		if(browser){
+		if (browser) {
 			// get all elements with class
-			let elements: Element[] = Array.from(document.getElementsByClassName(name+"element"));
+			let elements: Element[] = Array.from(document.getElementsByClassName(name + 'element'));
 
 			// trigger click on elements with that name
-			elements.forEach(e => {
+			elements.forEach((e) => {
 				let element = e as HTMLElement;
 				element.click();
 			});
@@ -133,25 +151,31 @@
 
 	function onIconClick(name: string, component: any) {
 		showStartMenu = false;
-		doubleClickTimer = window.setTimeout(() => doubleClicked = false, 500);
+		doubleClickTimer = window.setTimeout(() => (doubleClicked = false), 500);
 		if (doubleClicked) {
-			if(!openWindows.find(w => w.name === name)) 
-				openWindows = [...openWindows, { name: name, component: component, 
-					left: getWinLeftPostition(name), top: getWinTopPostition(name) }];
-		}
-		else  doubleClicked = true;
+			if (!openWindows.find((w) => w.name === name))
+				openWindows = [
+					...openWindows,
+					{
+						name: name,
+						component: component,
+						left: getWinLeftPostition(name),
+						top: getWinTopPostition(name)
+					}
+				];
+		} else doubleClicked = true;
 	}
 
 	function onWindowClose(windowName: string) {
 		// set left and top before removing window from array
-		let window = openWindows.find(w => w.name === windowName);
+		let window = openWindows.find((w) => w.name === windowName);
 		if (window) {
 			window.left = getWinLeftPostition(windowName);
 			window.top = getWinTopPostition(windowName);
 		}
-		
+
 		// remove window from array
-		openWindows = openWindows.filter(window => window.name !== windowName);
+		openWindows = openWindows.filter((window) => window.name !== windowName);
 	}
 
 	if (browser) {
@@ -178,10 +202,15 @@
 		</DraggableIcon>
 	{/each}
 	{#each openWindows as windw, index}
-			<Window left={windw.left ?? 100} top={windw.top ?? 100}
-				zIndex={index} title={windw.name} onClose={() => onWindowClose(windw.name)}>
-				<svelte:component this={windw.component} />
-			</Window>
+		<Window
+			left={windw.left ?? 100}
+			top={windw.top ?? 100}
+			zIndex={index}
+			title={windw.name}
+			onClose={() => onWindowClose(windw.name)}
+		>
+			<svelte:component this={windw.component} />
+		</Window>
 	{/each}
 
 	<!-- windows start menu -->
@@ -194,35 +223,36 @@
 						type="button"
 						on:click={program.onClick}
 						class="w-full inline-block px-6 py-2.5 text-gray-700 text-left font-bold text-xs leading-tight uppercase hover:bg-gray-300 focus:bg-gray-300 focus:ring-0 active:bg-gray-400 transition duration-150 ease-in-out"
-						>{program.name}</button
-					>
+						>{program.name}</button>
 				{/each}
 			</div>
 		{/if}
 
-		<div class="p-1 bg-gray-400 left-0 border-t-2 border-gray-700">
-			<button
-				type="button"
-				on:click={onStartClick}
-				class=" start-menu-button inset-y-0 px-6 py-3 bg-gray-200 text-gray-700 font-bold text-xs leading-tight uppercase hover:bg-gray-300 focus:bg-gray-300 focus:ring-0 active:bg-gray-400 transition duration-150 ease-in-out"
-				>Start</button
-			>
-			<span class="fixed transparent-start-menu my-1.5 mx-2 font-bold border-l-2 px-2 border-gray-700">
-				<div class="text-gray-700 text-xs text-center text-transparent"> a</div>
+		<div class="p-1 bg-gray-400 left-0 border-t-2 border-gray-700 flex flex-row">
+			<span on:click={onStartClick}
+				class="flex-initial flex start-menu-button inset-y-0 px-3 py-3 bg-gray-200 text-gray-700 font-bold text-xs leading-tight uppercase hover:bg-gray-300 focus:bg-gray-300 focus:ring-0 active:bg-gray-400">
+				<img alt="startIcon" class="w-5 flex-initial" src='../win98/windows.png' />
+				<button class="flex-initial ml-2 uppercase inline-block self-end" type="button">Start</button>
+
+			</span>
+			<span class="fixed flex-initial transparent-start-menu my-1.5 mx-2 font-bold border-l-2 px-2 border-gray-700" 	>
+				<div class="text-gray-700 text-xs text-center text-transparent">a</div>
 				<div class="text-gray-700 text-xs text-right text-transparent">a</div>
 			</span>
-			<span class="ml-3">
+			<span class="ml-5 flex flex-initial">
 				{#each openWindows as windw, index}
-					
-					<button
-						type="button"
-						on:click={() => onStartMenuBarClick(windw.name)}
-						class=" start-menu-button mr-1 inset-y-0 px-6 py-2 bg-gray-200 text-gray-700 font-bold text-xs leading-tight uppercase hover:bg-gray-300 focus:bg-gray-300 focus:ring-0 active:bg-gray-400 transition duration-150 ease-in-out"
-						>{windw.name}</button
+					<!-- svelte-ignore a11y-missing-attribute -->
+					<span on:click={() => onStartMenuBarClick(windw.name)}
+						class="flex start-menu-button mr-1 inset-y-0 px-4 py-2 bg-gray-200 text-gray-700 font-bold text-xs leading-tight uppercase hover:bg-gray-300 focus:bg-gray-300 focus:ring-0 active:bg-gray-400"
 					>
+						<img class="w-5 flex-initial"
+							src={desktopIcons.find((icon) => windw.name === icon.name)?.icon}
+						/>
+						<button type="button" class="flex-initial ml-2">{windw.name}</button>
+					</span>
 				{/each}
 			</span>
-			
+
 			<!-- show time and date -->
 			<span class="fixed right-0 my-1.5 mx-2 font-bold border-l-2 px-2 border-gray-700">
 				<div class="text-gray-700 text-xs text-center">{time}</div>
@@ -236,7 +266,7 @@
 	.transparent-start-menu {
 		user-select: none;
 		cursor: auto;
-		left: 92px;
+		left: 5.96rem;
 	}
 	.win98-bg {
 		background-color: #378872;

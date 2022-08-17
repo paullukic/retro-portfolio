@@ -20,7 +20,7 @@
             left: 50,
             top: 50,
             tech: ['Firebase', 'JavaScript', 'HTML', 'Bootstrap', 'Dialogflow'],
-            onClick: () => onProjectClick('diarist.cloud', 'diarist.cloud'),
+            onClick: () => onProjectClick('https://diarist.cloud', 'diarist.cloud'),
         },
         {
             name: 'howdumb',
@@ -88,6 +88,7 @@ function calculateGridRows() {
         width: 100%;
         max-width: 600px;
         height: 100%;
+        min-height: 400px;
         max-height: 600px;
         overflow-y: scroll;
         background-color: silver;
