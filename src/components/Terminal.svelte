@@ -187,7 +187,7 @@
 					},
 					{
 						class: '',
-						text: 'LinkedIn: <a class="text-blue-600 visited:text-purple-600" href="https://www.linkedin.com/in/paullukic/" target="_blank">https://www.linkedin.com/in/paullukic/</a>'
+						text: 'LinkedIn: <a class="text-blue-600 visited:text-purple-600" href="https://www.linkedin.com/in/paul-lukic/" target="_blank">https://www.linkedin.com/in/paullukic/</a>'
 					}
 				];
 				lines = [...lines, ...socialLinks];
