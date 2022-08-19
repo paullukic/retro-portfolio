@@ -15,10 +15,8 @@
 		if (browser) return (localStorage.commandHistory = val);
 	});
 
-	if (browser){
-		commandHistory = localStorage.commandHistory
-			? JSON.parse(localStorage.commandHistory)
-			: [];
+	if (browser) {
+		commandHistory = localStorage.commandHistory ? JSON.parse(localStorage.commandHistory) : [];
 
 		commandHistoryIndex = commandHistory.length;
 	}
@@ -38,7 +36,7 @@
 		{
 			class: '',
 			text:
-				'<pre style="line-height: 1.15 !important;">' +
+				'<pre class="asciiArt" style="line-height: 1.15 !important;">' +
 				asciiArt[Math.floor(Math.random() * asciiArt.length)] +
 				'</pre>'
 		},
@@ -52,17 +50,16 @@
 		}
 	];
 
-			
 	// on lines change scroll to bottom
-	$: lines, (_=>{
-		setTimeout(() => {
-			if(browser) {
-				document.querySelector('#terminal')!.scrollTop = document.querySelector('#terminal')!.scrollHeight;
-			}
-		} , 10);
-	})();
-
-	
+	$: lines,
+		((_) => {
+			setTimeout(() => {
+				if (browser) {
+					document.querySelector('#terminal')!.scrollTop =
+						document.querySelector('#terminal')!.scrollHeight;
+				}
+			}, 10);
+		})();
 
 	const handleKeyDown = (e: KeyboardEvent) => {
 		if (e.key === 'Enter') {
@@ -129,17 +126,17 @@
 				error.play();
 			}
 
-			if(input.value){
-				if(input.value === commandHistory[commandHistory.length - 1]){
+			if (input.value) {
+				if (input.value === commandHistory[commandHistory.length - 1]) {
 					commandHistoryIndex = commandHistory.length;
 				} else {
 					commandHistory.push(input.value);
 					commandHistoryIndex = commandHistory.length;
 				}
-				
+
 				commandHistoryLocalStorage.set(JSON.stringify(commandHistory));
 			}
-			
+
 			input.value = '';
 			let valueCommandWithSign: TerminalLine = {
 				class: valueCommand.class,
@@ -155,24 +152,45 @@
 				commandHistoryLocalStorage.set(JSON.stringify(commandHistory));
 			}
 
-			if (valueCommand.text === 'show history'){
+			if (valueCommand.text === 'show history') {
 				lines = [...lines, { class: '', text: 'Command history:' }];
 				commandHistory.forEach((command, index) => {
-					lines = [...lines, { class: `${commands.some((comm) => comm.command === command) ? 'command' : 'error'}`, text: `> ${command}` }];
-				} );
+					lines = [
+						...lines,
+						{
+							class: `${commands.some((comm) => comm.command === command) ? 'command' : 'error'}`,
+							text: `> ${command}`
+						}
+					];
+				});
 			}
 
-			if (valueCommand.text === 'reload ascii'){
-				if(lines[0].text.includes('pre'))
-					lines[0].text = '<pre style="line-height: 1.15 !important;">' + asciiArt[Math.floor(Math.random() * asciiArt.length)] + '</pre>';
-				else 
-					lines = [...lines, { class: '', text: '<pre style="line-height: 1.15 !important;">' + asciiArt[Math.floor(Math.random() * asciiArt.length)] + '</pre>' }];
+			if (valueCommand.text === 'reload ascii') {
+				if (lines[0].text.includes('pre'))
+					lines[0].text =
+						'<pre style="line-height: 1.15 !important;">' +
+						asciiArt[Math.floor(Math.random() * asciiArt.length)] +
+						'</pre>';
+				else
+					lines = [
+						...lines,
+						{
+							class: '',
+							text:
+								'<pre style="line-height: 1.15 !important;">' +
+								asciiArt[Math.floor(Math.random() * asciiArt.length)] +
+								'</pre>'
+						}
+					];
 			}
 
 			if (valueCommand.text === 'get cv') {
-				//get cv from firestore
+				let a = document.createElement('a');
+				a.href = '../cv.pdf';
+				a.download = 'CV.pdf';
+				a.click();
 			}
-			if (valueCommand.text === ('start gui -win98')) {
+			if (valueCommand.text === 'start gui -win98') {
 				window.open('/gui/win98.html', '_blank');
 			}
 			if (valueCommand.text === 'get social') {
@@ -214,7 +232,7 @@
 						}
 					];
 				});
-			}	
+			}
 		}
 
 		// arrow up history command
@@ -228,12 +246,10 @@
 				if (commandHistoryIndex > 0) {
 					input.value = commandHistory[commandHistoryIndex - 1];
 					commandHistoryIndex--;
-				}
-				else {
+				} else {
 					commandHistoryIndex = commandHistory.length;
 					input.value = commandHistory[commandHistoryIndex - 1];
 					commandHistoryIndex--;
-
 				}
 			}
 		}
@@ -243,19 +259,16 @@
 			e.stopPropagation();
 
 			if (commandHistory.length > 0) {
-				if (commandHistoryIndex < commandHistory.length - 1)
-					commandHistoryIndex++;
+				if (commandHistoryIndex < commandHistory.length - 1) commandHistoryIndex++;
 				else commandHistoryIndex = 0;
-				
+
 				let input = e.target as HTMLInputElement;
 				input.value = commandHistory[commandHistoryIndex];
 			}
 		}
 
 		// on backspace reset command history index
-		if (e.key === 'Backspace')
-			commandHistoryIndex = commandHistory.length;
-
+		if (e.key === 'Backspace') commandHistoryIndex = commandHistory.length;
 	};
 
 	const focusTerminalInput = () => {
@@ -263,6 +276,7 @@
 		input.focus();
 	};
 </script>
+
 <title>Terminal</title>
 <div class="blackTerminal" id="terminal" on:click={focusTerminalInput}>
 	<div class="typewriterOne" />
@@ -284,6 +298,11 @@
 </div>
 
 <style>
+	@media only screen and (max-width: 600px) {
+		:global(.asciiArt) {
+			font-size: .4rem;
+		}
+	}
 
 	.command {
 		color: rgb(255, 113, 47);

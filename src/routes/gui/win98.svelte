@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/env';
+	import Resume from '../../components/Resume.svelte';
 	import Projects from '../../components/Projects.svelte';
 	import Contact from '../../components/Contact.svelte';
 	import DraggableIcon from '../../components/DraggableIcon.svelte';
@@ -57,6 +58,14 @@
 			top: '250px',
 			onClick: () => onIconClick('contact', Contact),
 			component: Contact
+		},
+		{
+			name: 'cv',
+			icon: '../win98/cv.png',
+			left: '50px',
+			top: '350px',
+			onClick: () => onIconClick('cv', Resume),
+			component: Resume
 		}
 	];
 
@@ -67,11 +76,12 @@
 	};
 	let startMenuPrograms: startMenuProgram[] = [
 		{
-			name: 'projects',
+			name: 'Projects',
 			onClick: () => onStartMenuItemClick('projects', Projects)
 		},
 		{
-			name: 'Resume'
+			name: 'Resume',
+			onClick: () => onStartMenuItemClick('cv', Resume)
 		},
 		{
 			name: 'Contact',
