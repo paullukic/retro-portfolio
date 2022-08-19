@@ -244,7 +244,6 @@
 				class="flex-initial flex start-menu-button inset-y-0 px-3 py-3 bg-gray-200 text-gray-700 font-bold text-xs leading-tight uppercase hover:bg-gray-300 focus:bg-gray-300 focus:ring-0 active:bg-gray-400">
 				<img alt="startIcon" class="w-5 flex-initial" src='../win98/windows.png' />
 				<button class="flex-initial ml-2 uppercase inline-block self-end" type="button">Start</button>
-
 			</span>
 			<span class="fixed flex-initial transparent-start-menu my-1.5 mx-2 font-bold border-l-2 px-2 border-gray-700" 	>
 				<div class="text-gray-700 text-xs text-center text-transparent">a</div>
@@ -259,7 +258,7 @@
 						<img class="w-5 flex-initial"
 							src={desktopIcons.find((icon) => windw.name === icon.name)?.icon}
 						/>
-						<button type="button" class="flex-initial ml-2">{windw.name}</button>
+						<button type="button" class="flex-initial ml-2 startbar-window-name">{windw.name}</button>
 					</span>
 				{/each}
 			</span>
@@ -274,6 +273,18 @@
 </div>
 
 <style>
+	 @media only screen and (max-width: 650px) {
+		:global(.startbar-window-name) {
+			display: none;
+		}
+		:global(.start-menu-button) {
+			padding-left: 6px !important;
+			padding-right: 6px !important;
+		}
+		:global(.transparent-start-menu) {
+			left: 5.3rem !important;
+		}
+	}
 	.transparent-start-menu {
 		user-select: none;
 		cursor: auto;

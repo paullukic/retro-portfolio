@@ -8,7 +8,7 @@
 <div on:click={onClick}>
     <div class="projectIcon" style="background-image: url({imageSrc});"></div>
     <div on:mouseenter={onMouseEnter} on:mouseleave={onMouseLeave}
-        class="projectIconText text-center mt-1 text-black">{name}</div>
+        class="projectIconText truncate text-center mt-1 text-black">{name}</div>
 </div>
 <style>
     .projectIcon{

@@ -42,6 +42,16 @@
 </DraggableWindow>
 
 <style>
+    @media only screen and (max-width: 650px) {
+		:global(.window) {
+			max-width: 300px !important;
+            max-height: 200px !important;
+		}
+        :global(.window-bar) {
+            max-width: 300px !important;
+            max-height: 50px !important;
+        }
+	}
     .window {
         position: absolute;
         top: 20px;
