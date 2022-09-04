@@ -298,7 +298,7 @@
 </div>
 
 <style>
-	@media only screen and (max-width: 600px) {
+	@media only screen and (max-width: 650px) {
 		:global(.asciiArt) {
 			font-size: .4rem;
 		}
